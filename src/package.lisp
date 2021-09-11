@@ -466,6 +466,7 @@
    #:max
    #:min
    #:Num #:+ #:- #:* #:fromInt
+   #:Integral #:div #:mod
    #:Dividable #:unsafe-/
    #:Semigroup #:<>
    #:Monoid #:mempty
@@ -486,7 +487,6 @@
    #:abs
    #:sign
    #:expt
-   #:mod
    #:even
    #:odd
    #:gcd

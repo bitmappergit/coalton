@@ -86,6 +86,14 @@
     (fromInt (Integer -> :a)))
 
   ;;
+  ;; Integral
+  ;;
+
+  (define-class (Num :a => (Integral :a))
+    (div (:a -> :a -> :a))
+    (mod (:a -> :a -> :a)))
+
+  ;;
   ;; Dividable
   ;;
 

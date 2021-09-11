@@ -240,11 +240,6 @@
     "Exponentiate BASE to the POWER."
     (lisp Integer (base power) (cl:expt base power)))
 
-  (declare mod (Integer -> Integer -> Integer))
-  (define (mod num base)
-    "Compute NUM modulo BASE."
-    (lisp Integer (num base) (cl:values (cl:mod num base))))
-
   (declare even (Integer ->  Boolean))
   (define (even n)
     "Is N even?"
@@ -264,6 +259,15 @@
   (define (lcm a b)
     "Compute the least common multiple of A and B."
     (lisp Integer (a b) (cl:lcm a b)))
+
+  (define-instance (Integral Integer)
+    (define (mod num base)
+      "Compute NUM modulo BASE."
+      (lisp Integer (num base) (cl:values (cl:mod num base))))
+
+    (define (div dividend divisor)
+      "Compute DIVIDEND divided by DIVISOR rounded down."
+      (lisp Integer (dividend divisor) (cl:values (cl:floor dividend divisor)))))
 
   (declare / ((Dividable :a :b) => (:a -> :a -> (Optional :b))))
   (define (/ x y)
