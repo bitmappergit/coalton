@@ -9,7 +9,15 @@
     (Leaf :a)
     (Node :a (Tree :a) (Tree :a)))
 
-  (declare tree-lookup (Int -> Int -> (Tree :a) -> (Optional :a)))
+  (define-instance (Functor Tree)
+    (define (map f t)
+      (match t
+	((Node x l r)
+	 (Node (f x) (map f l) (map f r)))
+	((Leaf x)
+	 (f x)))))
+  
+  (declare tree-lookup (Integer -> Integer -> (Tree :a) -> (Optional :a)))
   (define (tree-lookup size i t)
     (match i
       (0 (match t
@@ -23,12 +31,14 @@
 		  (tree-lookup size-new (- i 1) l)
 		  (tree-lookup size-new (- (- i 1) size-new) r))))))))
   
-  (declare tree-update (Int -> Int -> :a -> (Tree :a) -> (Tree :a)))
+  (declare tree-update (Integer -> Integer -> :a -> (Tree :a) -> (Tree :a)))
   (define (tree-update size i n t)
     (match i
       (0 (match t
-	   ((Leaf _) (Leaf n))
-	   ((Node _ l r) (Node n l r))))
+	   ((Leaf _)
+	    (Leaf n))
+	   ((Node _ l r)
+	    (Node n l r))))
       (_ (match t
 	   ((Leaf _) t)
 	   ((Node x l r)
@@ -38,10 +48,10 @@
 		  (node x l (tree-update size-new (- (- i 1) size-new) n r)))))))))
   
   (define-type (Seq :a)
-    (SeqCons Int (Tree :a) (Seq :a))
+    (SeqCons Integer (Tree :a) (Seq :a))
     SeqNil)
   
-  (declare seq-lookup (Int -> (Seq :a) -> (Optional :a)))
+  (declare seq-lookup (Integer -> (Seq :a) -> (Optional :a)))
   (define (seq-lookup i t)
     (match t
       ((SeqCons s x xs)
@@ -50,7 +60,7 @@
 	   (seq-lookup (- i s) xs)))
       (_ None)))
 
-  (declare seq-update (Int -> :a -> (Seq :a) -> (Seq :a)))
+  (declare seq-update (Integer -> :a -> (Seq :a) -> (Seq :a)))
   (define (seq-update i n t)
     (match t
       ((SeqCons s x xs)
@@ -64,8 +74,8 @@
     (match t
       ((SeqCons sa a (SeqCons sb b xs))
        (if (== sa sb)
-	   (Seq-Cons (+ (+ sa sb) 1) (Node n a b) xs)
-	   (Seq-Cons 1 (Leaf n) SeqNil)))
+	   (SeqCons (+ (+ sa sb) 1) (Node n a b) xs)
+	   (SeqCons 1 (Leaf n) SeqNil)))
       (other
        (SeqCons 1 (Leaf n) other))))
 
